@@ -33,18 +33,35 @@
 
     <div class="new-task">
 
-      <input type="text" placeholder="Nuova task">
-      <button>Aggiungi</button>
+      <input
+        v-model.trim="text"
+        type="text"
+        placeholder="Nuova task"
+        @keyup.enter="addTask"
+      >
+      <button @click="addTask">Aggiungi</button>
+
+      <p class="valid-entry" v-if="validEntry">
+        {{ validEntry }}
+      </p>
+      
+      <p class="valid-remove-task" v-if="validRemoveTask">
+        {{ validRemoveTask }}
+      </p>
 
     </div>
     
-
     <div class="task-container">
 
-      <ul>
-        <li>
-          <span>task da fare</span>
-          <i class="fa-regular fa-trash-can"></i>
+      <ul v-if="tasks.length > 0">
+        <!-- 3. Uso un ciclo v-for per iterare sugli oggetti toDo nell'array e generare un elemento HTML per ciascun oggetto.  
+          4. Al click su l'elemento di lista cambio la proprietà "done" e sbarro il testo. -->
+        <li v-for="(task, index) in tasks" :key="index">
+          <span :class="{ 'completed': task.done }" @click="toggleDone(index)">
+            {{ task.text }}
+          </span>
+          <!-- 5. Al click del cestino posto alla fine della stessa riga del testo, rimuovere l'elemento stesso dalla lista. -->
+          <i @click="removeTask(index)" class="fa-regular fa-trash-can"></i>
         </li>
       </ul>
 
